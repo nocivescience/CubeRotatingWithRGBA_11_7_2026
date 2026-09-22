@@ -10,7 +10,10 @@ async fn main() {
     // Configuración física
     let desaceleracion = 0.985; 
     let impulso = 0.15;         
-    let mut color_actual = WHITE;
+
+    let colores = ["WHITE", "RED", "GREEN"];
+
+    let mut color_actual = colores[colores.len()*]
 
     // Definimos los 8 vértices de un cubo de tamaño 1.0 centrado en el origen (0,0,0)
     let vertices_locales = [
@@ -32,7 +35,10 @@ async fn main() {
     ];
 
     loop {
+        let dir_y = rand::gen_range(-1.0, 1.0);
+        let dir_ac = rand::gen_range(-0.2, 0.2);
         clear_background(BLACK);
+
 
         // 1. Configurar la cámara 3D estándar
         set_camera(&Camera3D {
@@ -49,9 +55,10 @@ async fn main() {
 
         // 3. Actualizar física de rotación
         if velocidad_rotacion > 0.001 {
+            
             rotacion_x += velocidad_rotacion;
-            rotacion_y += velocidad_rotacion * 0.7;
-            velocidad_rotacion *= desaceleracion;
+            rotacion_y += velocidad_rotacion * dir_y;
+            velocidad_rotacion *= desaceleracion + dir_ac;
         } else {
             velocidad_rotacion = 0.0;
         }
@@ -61,7 +68,7 @@ async fn main() {
         color_actual = Color::new(
             0.3 + (intensidad * 0.7), 
             0.2 + (intensidad * 0.5), 
-            0.5 + (intensidad * 0.5), 
+            0.5 + (intensidad * 1.0), 
             1.0,
         );
 
@@ -83,6 +90,10 @@ async fn main() {
         set_default_camera();
         draw_text("Haz CLIC para hacer girar el cubo", 20.0, 30.0, 24.0, WHITE);
         draw_text(&format!("Velocidad: {:.4}", velocidad_rotacion), 20.0, 60.0, 20.0, GRAY);
+
+        if dir_y < -0.9 {
+            draw_text(&format!("{:.2}", dir_y), 200.0, 20.0, 20.0, Color::new(1.0, 0.0, 0.0, 1.0));
+        }
 
         next_frame().await
     }
