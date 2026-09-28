@@ -5,3 +5,7 @@ edition = "2024"
 
 [dependencies]
 macroquad = "0.4.15"
+
+[[bin]]
+name = "colores"
+path = "src/colores.rs"
